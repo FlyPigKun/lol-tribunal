@@ -662,6 +662,66 @@ main {
     background: rgba(200,170,110,0.1);
 }
 
+/* 法官英雄卡片 */
+.judge-card {
+    background: linear-gradient(135deg, rgba(232,64,87,0.1), rgba(10,22,40,0.8));
+    border: 1px solid rgba(232,64,87,0.4);
+    padding: 25px;
+    margin-bottom: 30px;
+    text-align: center;
+    animation: judgeReveal 0.8s ease 0.3s both;
+}
+
+@keyframes judgeReveal {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.judge-card-header {
+    font-size: 12px;
+    color: var(--red);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.judge-avatar {
+    font-size: 56px;
+    margin-bottom: 10px;
+    animation: spinIn 0.8s ease;
+}
+
+.judge-name {
+    font-size: 26px;
+    color: var(--gold);
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.judge-title {
+    font-size: 14px;
+    color: var(--gold-dark);
+    margin-top: 4px;
+    letter-spacing: 2px;
+}
+
+.judge-quote {
+    font-size: 14px;
+    color: rgba(200,170,110,0.6);
+    font-style: italic;
+    margin-top: 15px;
+    line-height: 1.6;
+}
+
+.accused-value {
+    color: var(--red) !important;
+}
+
+.hi-accused {
+    color: var(--red);
+    font-weight: bold;
+}
+
 /* ========================================
    历史记录
    ======================================== */

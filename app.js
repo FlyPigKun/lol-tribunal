@@ -3,17 +3,33 @@ const STORAGE_KEY = 'tribunal_members';
 const HISTORY_KEY = 'tribunal_history';
 const USER_KEY = 'tribunal_current_user';
 
-function getMembers() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-}
-function saveMembers(members) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
-}
-function getHistory() {
-    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-}
-function saveHistory(records) {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(records));
+function getMembers() { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+function saveMembers(m) { localStorage.setItem(STORAGE_KEY, JSON.stringify(m)); }
+function getHistory() { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+function saveHistory(r) { localStorage.setItem(HISTORY_KEY, JSON.stringify(r)); }
+
+// ===== 英雄联盟法官角色 =====
+const heroJudges = [
+    { name: '盖伦', title: '德玛西亚之力', quote: '人在塔在！正义，不会被征服！', emoji: '\u2694' },
+    { name: '凯尔', title: '正义天使', quote: '在我的法庭上，没有人能逃脱制裁。', emoji: '\u2694' },
+    { name: '蔚', title: '皮城执法官', quote: '拳头就是我的判决书。', emoji: '\u270A' },
+    { name: '卡蜜尔', title: '青钢影', quote: '精确，高效，不留余地。', emoji: '\u2702' },
+    { name: '德莱文', title: '荣耀行刑官', quote: '欢迎来到德莱文的审判秀！', emoji: '\u{1F3AF}' },
+    { name: '拉克丝', title: '光辉女郎', quote: '光明会照亮一切真相！', emoji: '\u2728' },
+    { name: '慎', title: '暮光之眼', quote: '均衡，存乎万物之间。', emoji: '\u{1F441}' },
+    { name: '艾希', title: '寒冰射手', quote: '和平需要代价，而审判就是代价。', emoji: '\u2744' },
+    { name: '嘉文四世', title: '德玛西亚皇子', quote: '以皇子之名，宣判你的命运！', emoji: '\u{1F451}' },
+    { name: '索拉卡', title: '众星之子', quote: '星辰会记录你的罪与罚。', emoji: '\u2B50' },
+    { name: '卡尔玛', title: '天启者', quote: '真正的审判来自内心的觉悟。', emoji: '\u{1F4BF}' },
+    { name: '卢锡安', title: '圣枪游侠', quote: '正义不灭，光明永存。', emoji: '\u{1F52B}' },
+    { name: '莫甘娜', title: '堕落天使', quote: '我了解罪恶，因此更懂审判。', emoji: '\u{1F987}' },
+    { name: '锤石', title: '魂锁典狱长', quote: '你的灵魂，将由我来收割。', emoji: '\u26D3' },
+    { name: '维克托', title: '机械先驱', quote: '进化，是唯一的审判标准。', emoji: '\u2699' },
+    { name: '泰达米尔', title: '蛮族之王', quote: '我的怒火就是判决！', emoji: '\u{1F525}' },
+];
+
+function getRandomJudge() {
+    return heroJudges[Math.floor(Math.random() * heroJudges.length)];
 }
 
 const colorPool = [
@@ -33,14 +49,10 @@ let currentUser = '';
 // ===== 初始化 =====
 function init() {
     currentUser = sessionStorage.getItem(USER_KEY);
-    if (!currentUser) {
-        window.location.href = 'index.html';
-        return;
-    }
+    if (!currentUser) { window.location.href = 'index.html'; return; }
 
     document.getElementById('display-name').textContent = currentUser;
 
-    // 入场过渡动画
     const transition = document.getElementById('enter-transition');
     document.getElementById('transition-name').textContent = currentUser;
     setTimeout(() => transition.classList.add('fade-out'), 1200);
@@ -151,7 +163,6 @@ function drawWheel(rotation) {
     ctx.strokeStyle = '#c8aa6e';
     ctx.lineWidth = 3;
     ctx.stroke();
-
     ctx.beginPath();
     ctx.arc(cx, cy, radius + 12, 0, 2 * Math.PI);
     ctx.strokeStyle = 'rgba(200,170,110,0.3)';
@@ -194,16 +205,16 @@ function drawWheel(rotation) {
         ctx.restore();
     });
 
-    // 中心
+    // 中心 - 红色审判标记
     ctx.beginPath();
     ctx.arc(cx, cy, 30, 0, 2 * Math.PI);
-    ctx.fillStyle = '#0a1628';
+    ctx.fillStyle = '#1a0a0a';
     ctx.fill();
-    ctx.strokeStyle = '#c8aa6e';
+    ctx.strokeStyle = '#e84057';
     ctx.lineWidth = 2;
     ctx.stroke();
-    ctx.fillStyle = '#c8aa6e';
-    ctx.font = 'bold 12px sans-serif';
+    ctx.fillStyle = '#e84057';
+    ctx.font = 'bold 11px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('审判', cx, cy);
@@ -217,7 +228,7 @@ function spinWheel() {
 
     const btn = document.getElementById('spin-btn');
     btn.disabled = true;
-    btn.textContent = '抽选中...';
+    btn.textContent = '审判之轮转动中...';
     document.getElementById('result-panel').classList.add('hidden');
 
     const totalRotation = Math.PI * 2 * (5 + Math.random() * 5);
@@ -245,7 +256,7 @@ function onSpinComplete() {
     isSpinning = false;
     const btn = document.getElementById('spin-btn');
     btn.disabled = false;
-    btn.textContent = '开始抽选法官';
+    btn.textContent = '转动审判之轮';
 
     const sliceAngle = (2 * Math.PI) / members.length;
     let norm = currentAngle % (2 * Math.PI);
@@ -253,25 +264,48 @@ function onSpinComplete() {
     const pointer = (2 * Math.PI - norm + Math.PI * 1.5) % (2 * Math.PI);
     const idx = Math.floor(pointer / sliceAngle) % members.length;
 
-    showResult(members[idx]);
+    // 被审判者 = 转盘选中的人
+    const accused = members[idx];
+    // 法官 = 随机英雄
+    const judge = getRandomJudge();
+
+    showResult(accused, judge);
 }
 
 // ===== 结果 =====
-function showResult(judgeName) {
+function showResult(accusedName, judge) {
     const panel = document.getElementById('result-panel');
     panel.classList.remove('hidden');
 
     const caseNum = 'TRB-' + Date.now().toString(36).toUpperCase().slice(-6);
-    document.getElementById('result-title').textContent = `法官: ${judgeName}`;
-    document.getElementById('result-desc').textContent = `召唤师「${judgeName}」已被选为本次审判的法官，将以公正之名裁决！`;
-    document.getElementById('result-judge').textContent = judgeName;
+
+    document.getElementById('result-title').textContent = `${accusedName} 被送上审判庭！`;
+    document.getElementById('result-desc').textContent = `命运之轮已做出选择，召唤师「${accusedName}」将接受审判。`;
+
+    // 法官卡片
+    document.getElementById('judge-avatar').textContent = judge.emoji;
+    document.getElementById('judge-hero-name').textContent = judge.name;
+    document.getElementById('judge-hero-title').textContent = judge.title;
+    document.getElementById('judge-quote').textContent = `"${judge.quote}"`;
+
+    // 信息
+    document.getElementById('result-accused').textContent = accusedName;
+    document.getElementById('result-judge').textContent = `${judge.name} (${judge.title})`;
     document.getElementById('result-summoner').textContent = currentUser;
     document.getElementById('result-case').textContent = caseNum;
 
+    // 保存历史
     const records = getHistory();
     const now = new Date();
     const timeStr = now.toLocaleDateString('zh-CN') + ' ' + now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-    records.unshift({ judge: judgeName, summoner: currentUser, caseNum, time: timeStr });
+    records.unshift({
+        accused: accusedName,
+        judge: judge.name,
+        judgeTitle: judge.title,
+        summoner: currentUser,
+        caseNum,
+        time: timeStr
+    });
     if (records.length > 50) records.length = 50;
     saveHistory(records);
     renderHistory();
@@ -287,7 +321,11 @@ function renderHistory() {
     }
     list.innerHTML = records.map(h => `
         <div class="history-item">
-            <span>法官 <span class="hi-judge">${escapeHtml(h.judge)}</span> | 发起人: ${escapeHtml(h.summoner)} | ${h.caseNum}</span>
+            <span>
+                <span class="hi-accused">${escapeHtml(h.accused)}</span> 被审判
+                | 法官: <span class="hi-judge">${escapeHtml(h.judge)}</span>
+                | ${h.caseNum}
+            </span>
             <span class="hi-time">${h.time}</span>
         </div>
     `).join('');

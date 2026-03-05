@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>正义审判庭 - 法官选举</title>
+    <title>正义审判庭 - 审判之轮</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -47,16 +47,16 @@
 
         <!-- 转盘区域 -->
         <section class="wheel-section">
-            <h2>转动命运之轮，选出今日法官</h2>
-            <p class="wheel-desc">从所有已登录的召唤师中，随机抽选一位担任审判法官</p>
-            <p id="wheel-warning" class="wheel-warning hidden">至少需要 2 位成员才能开始抽选</p>
+            <h2>转动审判之轮，选出被审判者</h2>
+            <p class="wheel-desc">命运之轮将从所有召唤师中选出一位接受审判，英雄联盟的英雄将担任法官</p>
+            <p id="wheel-warning" class="wheel-warning hidden">至少需要 2 位成员才能开始审判</p>
 
             <div class="wheel-wrapper">
                 <div class="wheel-pointer">&#9660;</div>
                 <canvas id="wheel-canvas" width="500" height="500"></canvas>
             </div>
 
-            <button id="spin-btn" class="spin-button" onclick="spinWheel()" disabled>开始抽选法官</button>
+            <button id="spin-btn" class="spin-button" onclick="spinWheel()" disabled>转动审判之轮</button>
         </section>
 
         <!-- 审判结果 -->
@@ -65,9 +65,22 @@
                 <div class="result-badge">&#9878;</div>
                 <h2 id="result-title"></h2>
                 <p id="result-desc"></p>
+
+                <div class="judge-card" id="judge-card">
+                    <div class="judge-card-header">主审法官</div>
+                    <div class="judge-avatar" id="judge-avatar"></div>
+                    <div class="judge-name" id="judge-hero-name"></div>
+                    <div class="judge-title" id="judge-hero-title"></div>
+                    <div class="judge-quote" id="judge-quote"></div>
+                </div>
+
                 <div class="result-info">
                     <div class="info-item">
-                        <span class="info-label">审判法官</span>
+                        <span class="info-label">被审判者</span>
+                        <span id="result-accused" class="info-value accused-value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">主审法官</span>
                         <span id="result-judge" class="info-value"></span>
                     </div>
                     <div class="info-item">
@@ -75,11 +88,11 @@
                         <span id="result-summoner" class="info-value"></span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">审判编号</span>
+                        <span class="info-label">案件编号</span>
                         <span id="result-case" class="info-value"></span>
                     </div>
                 </div>
-                <button class="retry-btn" onclick="resetWheel()">重新抽选</button>
+                <button class="retry-btn" onclick="resetWheel()">重新审判</button>
             </div>
         </div>
 
