@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正义审判庭 - 法官选举</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <span class="header-logo">&#9878;</span>
+            <span class="header-title">正义审判庭</span>
+        </div>
+        <div class="header-right">
+            <span id="display-name" class="summoner-name"></span>
+            <a href="index.html" class="logout-btn">退出</a>
+        </div>
+    </header>
+
+    <!-- 入场过渡动画 -->
+    <div id="enter-transition" class="enter-transition">
+        <div class="transition-content">
+            <div class="transition-wheel-icon">&#9878;</div>
+            <div class="transition-name" id="transition-name"></div>
+            <div class="transition-sub">正在进入审判庭...</div>
+        </div>
+    </div>
+
+    <main>
+        <!-- 成员管理 -->
+        <section class="members-section">
+            <div class="members-header">
+                <h3>审判庭成员 (<span id="member-count">0</span>)</h3>
+                <div class="member-actions">
+                    <button class="clear-btn" onclick="clearMembers()">清空成员</button>
+                </div>
+            </div>
+            <div id="member-list" class="member-list">
+                <p class="empty-members">暂无成员，请邀请召唤师登录加入</p>
+            </div>
+            <div class="add-member-row">
+                <input type="text" id="add-member-input" placeholder="手动添加成员名称" maxlength="16">
+                <button onclick="addMemberManually()">添加</button>
+            </div>
+        </section>
+
+        <!-- 转盘区域 -->
+        <section class="wheel-section">
+            <h2>转动命运之轮，选出今日法官</h2>
+            <p class="wheel-desc">从所有已登录的召唤师中，随机抽选一位担任审判法官</p>
+            <p id="wheel-warning" class="wheel-warning hidden">至少需要 2 位成员才能开始抽选</p>
+
+            <div class="wheel-wrapper">
+                <div class="wheel-pointer">&#9660;</div>
+                <canvas id="wheel-canvas" width="500" height="500"></canvas>
+            </div>
+
+            <button id="spin-btn" class="spin-button" onclick="spinWheel()" disabled>开始抽选法官</button>
+        </section>
+
+        <!-- 审判结果 -->
+        <div id="result-panel" class="result-panel hidden">
+            <div class="result-content">
+                <div class="result-badge">&#9878;</div>
+                <h2 id="result-title"></h2>
+                <p id="result-desc"></p>
+                <div class="result-info">
+                    <div class="info-item">
+                        <span class="info-label">审判法官</span>
+                        <span id="result-judge" class="info-value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">发起人</span>
+                        <span id="result-summoner" class="info-value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">审判编号</span>
+                        <span id="result-case" class="info-value"></span>
+                    </div>
+                </div>
+                <button class="retry-btn" onclick="resetWheel()">重新抽选</button>
+            </div>
+        </div>
+
+        <!-- 历史记录 -->
+        <section class="history-section">
+            <h3>审判记录</h3>
+            <div id="history-list" class="history-list">
+                <p class="empty-history">暂无审判记录</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
