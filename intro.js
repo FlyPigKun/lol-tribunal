@@ -261,8 +261,14 @@ function enterTribunal() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
     }
 
-    // 跳转到审判页
-    window.location.href = 'tribunal.html';
+    // 播放退出过渡动画后跳转
+    const overlay = document.getElementById('exit-overlay');
+    document.getElementById('exit-name').textContent = name;
+    overlay.classList.add('active');
+
+    setTimeout(() => {
+        window.location.href = 'tribunal.html';
+    }, 1500);
 }
 
 // ===== 粒子 =====
